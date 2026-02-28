@@ -1,2 +1,0 @@
-# NFUC-Registration
-NFUC

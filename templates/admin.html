@@ -1,0 +1,469 @@
+<!--
+Admin Dashboard - View and manage student registrations
+Access at: http://localhost:5000/admin
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NFUC Admin Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f7fa;
+      color: #333;
+    }
+
+    .navbar {
+      background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%);
+      padding: 0 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .navbar-title {
+      color: white;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .navbar-right {
+      color: white;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .dashboard-header {
+      margin-bottom: 30px;
+    }
+
+    .dashboard-header h1 {
+      color: #1e3a5f;
+      margin-bottom: 10px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .stat-card h3 {
+      color: #888;
+      font-size: 12px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .stat-card .number {
+      font-size: 32px;
+      font-weight: 700;
+      color: #2c5282;
+    }
+
+    .controls {
+      margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-primary {
+      background: #2c5282;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #1e3a5f;
+    }
+
+    .btn-success {
+      background: #059669;
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #047857;
+    }
+
+    .table-container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead {
+      background: #f5f7fa;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    th {
+      padding: 15px;
+      text-align: left;
+      font-weight: 600;
+      color: #1f2937;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    td {
+      padding: 15px;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 14px;
+    }
+
+    tbody tr:hover {
+      background: #f9fafb;
+    }
+
+    .action-btn {
+      padding: 5px 12px;
+      margin-right: 5px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .btn-view {
+      background: #3b82f6;
+      color: white;
+    }
+
+    .btn-delete {
+      background: #ef4444;
+      color: white;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+    }
+
+    .modal-content {
+      background: white;
+      margin: 5% auto;
+      padding: 30px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 700px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .modal-close {
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      color: #888;
+      cursor: pointer;
+    }
+
+    .modal-close:hover {
+      color: #333;
+    }
+
+    .detail-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .detail-field {
+      padding-bottom: 20px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .detail-label {
+      font-size: 12px;
+      color: #888;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .detail-value {
+      font-size: 14px;
+      color: #333;
+      font-weight: 500;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+
+<div class="navbar">
+  <div class="navbar-title">🎓 NFUC Admin Dashboard</div>
+  <div class="navbar-right">
+    <span>Student Registrations</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="dashboard-header">
+    <h1>Registration Management</h1>
+    <p>View and manage student registrations for NFUC 2026</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card">
+      <h3>Total Registrations</h3>
+      <div class="number" id="totalCount">0</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn btn-success" onclick="exportCSV()">📥 Export as CSV</button>
+    <button class="btn btn-primary" onclick="refreshData()">🔄 Refresh</button>
+  </div>
+
+  <div class="table-container">
+    <table id="studentsTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Full Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Program</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <tr>
+          <td colspan="7" class="empty-state">Loading registrations...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Detail Modal -->
+<div id="detailModal" class="modal">
+  <div class="modal-content">
+    <span class="modal-close" onclick="closeModal()">&times;</span>
+    <h2 id="modalTitle">Student Details</h2>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+  const API_URL = 'http://localhost:5000';
+
+  function loadStudents() {
+    fetch(`${API_URL}/api/students`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          renderTable(data.students);
+          document.getElementById('totalCount').textContent = data.total;
+        }
+      })
+      .catch(err => console.error('Error loading students:', err));
+  }
+
+  function renderTable(students) {
+    const tbody = document.getElementById('tableBody');
+    if (students.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No registrations yet.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = students.map(s => `
+      <tr>
+        <td>#${s.id}</td>
+        <td>${s.full_name}</td>
+        <td>${s.email}</td>
+        <td>${s.phone || '-'}</td>
+        <td>${s.program || '-'}</td>
+        <td><span style="background:#e0f2fe; padding:4px 8px; border-radius:4px; font-size:12px;">Submitted</span></td>
+        <td>
+          <button class="action-btn btn-view" onclick="viewDetails(${s.id})">View</button>
+          <button class="action-btn btn-delete" onclick="deleteStudent(${s.id})">Delete</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function viewDetails(studentId) {
+    fetch(`${API_URL}/api/students/${studentId}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          const s = data.student;
+          document.getElementById('modalTitle').textContent = `${s.full_name} - Application #${s.id}`;
+          document.getElementById('modalBody').innerHTML = `
+            <div class="detail-row">
+              <div class="detail-field">
+                <div class="detail-label">Full Name</div>
+                <div class="detail-value">${s.full_name}</div>
+              </div>
+              <div class="detail-field">
+                <div class="detail-label">Email</div>
+                <div class="detail-value">${s.email}</div>
+              </div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-field">
+                <div class="detail-label">Phone</div>
+                <div class="detail-value">${s.phone || '-'}</div>
+              </div>
+              <div class="detail-field">
+                <div class="detail-label">Date of Birth</div>
+                <div class="detail-value">${s.date_of_birth || '-'}</div>
+              </div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-field">
+                <div class="detail-label">Gender</div>
+                <div class="detail-value">${s.gender || '-'}</div>
+              </div>
+              <div class="detail-field">
+                <div class="detail-label">Nationality</div>
+                <div class="detail-value">${s.nationality || '-'}</div>
+              </div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-field">
+                <div class="detail-label">Program</div>
+                <div class="detail-value">${s.program || '-'}</div>
+              </div>
+              <div class="detail-field">
+                <div class="detail-label">Highest Qualification</div>
+                <div class="detail-value">${s.qualification || '-'}</div>
+              </div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-field">
+                <div class="detail-label">Province</div>
+                <div class="detail-value">${s.province || '-'}</div>
+              </div>
+              <div class="detail-field">
+                <div class="detail-label">District</div>
+                <div class="detail-value">${s.district || '-'}</div>
+              </div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-field">
+                <div class="detail-label">Guardian Name</div>
+                <div class="detail-value">${s.guardian_name || '-'}</div>
+              </div>
+              <div class="detail-field">
+                <div class="detail-label">Guardian Contact</div>
+                <div class="detail-value">${s.guardian_contact || '-'}</div>
+              </div>
+            </div>
+            <div class="detail-row full">
+              <div class="detail-field">
+                <div class="detail-label">Medical Conditions</div>
+                <div class="detail-value">${s.medical_conditions || 'None'}</div>
+              </div>
+            </div>
+            <div class="detail-row full">
+              <div class="detail-field">
+                <div class="detail-label">Submitted</div>
+                <div class="detail-value">${new Date(s.created_at).toLocaleString()}</div>
+              </div>
+            </div>
+          `;
+          document.getElementById('detailModal').style.display = 'block';
+        }
+      })
+      .catch(err => console.error('Error loading details:', err));
+  }
+
+  function deleteStudent(studentId) {
+    if (confirm('Are you sure you want to delete this registration?')) {
+      fetch(`${API_URL}/api/students/${studentId}`, { method: 'DELETE' })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            alert('Registration deleted successfully');
+            loadStudents();
+          }
+        })
+        .catch(err => console.error('Error deleting student:', err));
+    }
+  }
+
+  function exportCSV() {
+    window.location.href = `${API_URL}/api/export-csv`;
+  }
+
+  function closeModal() {
+    document.getElementById('detailModal').style.display = 'none';
+  }
+
+  function refreshData() {
+    loadStudents();
+  }
+
+  // Close modal when clicking outside
+  window.onclick = function(event) {
+    const modal = document.getElementById('detailModal');
+    if (event.target == modal) {
+      modal.style.display = 'none';
+    }
+  }
+
+  // Load students on page load
+  loadStudents();
+</script>
+
+</body>
+</html>

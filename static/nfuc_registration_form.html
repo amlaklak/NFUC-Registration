@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NFUC Student Portal - Registration</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f7fa;
+      color: #333;
+    }
+
+    /* Top Navigation Bar */
+    .navbar {
+      background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%);
+      padding: 0 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      color: white;
+    }
+
+    .navbar-logo {
+      width: 45px;
+      height: 45px;
+      background: white;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #2c5282;
+    }
+
+    .navbar-title {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .navbar-right {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      color: white;
+      font-size: 14px;
+    }
+
+    /* Main Container */
+    .main-container {
+      display: flex;
+      max-width: 1600px;
+      margin: 0 auto;
+      gap: 20px;
+      padding: 20px;
+      min-height: calc(100vh - 70px);
+    }
+
+    /* Left Sidebar */
+    .sidebar {
+      width: 300px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+      height: fit-content;
+      position: sticky;
+      top: 90px;
+    }
+
+    .sidebar-header {
+      background: linear-gradient(135deg, #2c5282 0%, #3b6ba8 100%);
+      color: white;
+      padding: 20px;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .status-card {
+      padding: 20px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .status-label {
+      font-size: 12px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .status-value {
+      font-size: 16px;
+      color: #2c5282;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .status-badge.pending {
+      background: #fbbf24;
+      color: #78350f;
+    }
+
+    .menu-item {
+      padding: 15px 20px;
+      border-left: 3px solid transparent;
+      color: #555;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .menu-item:hover {
+      background: #f5f7fa;
+      border-left-color: #3b6ba8;
+      color: #2c5282;
+    }
+
+    .menu-item.active {
+      background: #f5f7fa;
+      border-left-color: #2c5282;
+      color: #2c5282;
+    }
+
+    /* Main Content */
+    .content-area {
+      flex: 1;
+      display: flex;
+      gap: 20px;
+    }
+
+    .form-section {
+      flex: 1;
+      background: white;
+      border-radius: 12px;
+      padding: 35px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .form-header {
+      margin-bottom: 30px;
+      border-bottom: 2px solid #e5e7eb;
+      padding-bottom: 20px;
+    }
+
+    .form-title {
+      font-size: 26px;
+      font-weight: 600;
+      color: #1e3a5f;
+      margin-bottom: 8px;
+    }
+
+    .form-subtitle {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-section-title {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #2c5282;
+      letter-spacing: 0.5px;
+      margin: 25px 0 15px 0;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #333;
+      font-size: 13px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="date"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+      transition: border 0.3s;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #2c5282;
+      box-shadow: 0 0 0 3px rgba(44, 82, 130, 0.1);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-row.full {
+      grid-template-columns: 1fr;
+    }
+
+    .submit-btn {
+      background: linear-gradient(135deg, #2c5282 0%, #3b6ba8 100%);
+      color: white;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 30px;
+      width: 100%;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(44, 82, 130, 0.3);
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(44, 82, 130, 0.4);
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .success-message {
+      display: none;
+      background: #d1fae5;
+      color: #065f46;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      border-left: 4px solid #10b981;
+    }
+
+    .error-message {
+      display: none;
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      border-left: 4px solid #ef4444;
+    }
+
+    /* ChatGPT Chatbot */
+    .chatbot-container {
+      width: 320px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      height: 650px;
+      top: 90px;
+      position: sticky;
+    }
+
+    .chatbot-header {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      color: white;
+      padding: 16px;
+      border-radius: 12px 12px 0 0;
+      font-weight: 600;
+      text-align: center;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .api-setup {
+      padding: 12px;
+      background: #f0fdf4;
+      border-bottom: 1px solid #dcfce7;
+      font-size: 12px;
+      color: #1f2937;
+    }
+
+    .api-setup strong {
+      color: #059669;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    #apiKeyInput {
+      width: 100%;
+      padding: 8px;
+      margin-top: 6px;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    .chatbot-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px;
+    }
+
+    .message {
+      margin-bottom: 12px;
+      display: flex;
+      gap: 8px;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .message.user {
+      justify-content: flex-end;
+    }
+
+    .message.bot {
+      justify-content: flex-start;
+    }
+
+    .message-text {
+      max-width: 85%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      word-wrap: break-word;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .message.user .message-text {
+      background: #2c5282;
+      color: white;
+    }
+
+    .message.bot .message-text {
+      background: #f0f9ff;
+      color: #1f2937;
+      border: 1px solid #e0f2fe;
+    }
+
+    .chatbot-input-area {
+      padding: 12px;
+      display: flex;
+      gap: 8px;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    #chatInput {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+
+    #sendBtn {
+      padding: 10px 14px;
+      background: #059669;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: auto;
+      font-weight: 600;
+      font-size: 12px;
+      transition: all 0.3s;
+    }
+
+    #sendBtn:hover {
+      background: #047857;
+      transform: translateY(-1px);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+      .main-container {
+        flex-direction: column;
+      }
+      
+      .sidebar {
+        width: 100%;
+        position: static;
+      }
+
+      .content-area {
+        flex-direction: column;
+      }
+
+      .chatbot-container {
+        width: 100%;
+        height: auto;
+        position: static;
+        max-height: 500px;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 0 15px;
+      }
+
+      .navbar-title {
+        font-size: 16px;
+      }
+
+      .form-section {
+        padding: 20px;
+      }
+
+      .form-title {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<div class="navbar">
+  <div class="navbar-brand">
+    <div class="navbar-logo">🎓</div>
+    <div class="navbar-title">NFUC Student Portal</div>
+  </div>
+  <div class="navbar-right">
+    <span>📅 Registration 2026</span>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="main-container">
+  
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-header">Application Status</div>
+
+    <div class="status-card">
+      <div class="status-label">Current Status</div>
+      <div class="status-value">In Progress</div>
+      <span class="status-badge pending">Pending Submission</span>
+    </div>
+
+    <div class="status-card">
+      <div class="status-label">Progress</div>
+      <div style="background: #e5e7eb; height: 8px; border-radius: 4px; overflow: hidden;">
+        <div style="background: #059669; height: 100%; width: 45%;"></div>
+      </div>
+    </div>
+
+    <div class="status-card">
+      <div class="status-label">Application ID</div>
+      <div class="status-value" style="font-size: 12px; color: #888;">NFUC-2026-****</div>
+    </div>
+
+    <div style="margin-top: 10px;">
+      <div class="menu-item active">📝 Registration</div>
+      <div class="menu-item">📁 Documents</div>
+      <div class="menu-item">💰 Payment</div>
+      <div class="menu-item">✅ Confirmation</div>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="content-area">
+    
+    <!-- Registration Form -->
+    <div class="form-section">
+      <div class="form-header">
+        <div class="form-title">Student Registration</div>
+        <div class="form-subtitle">Complete all fields below to register for NFUC 2026</div>
+      </div>
+
+      <div class="success-message" id="successMessage">
+        ✓ Registration submitted successfully! Your application ID will be sent to your email.
+      </div>
+
+      <div class="error-message" id="errorMessage">
+        ✗ Error submitting registration. Please try again.
+      </div>
+
+      <form id="registrationForm">
+        
+        <!-- Personal Information Section -->
+        <div class="form-section-title">Personal Information</div>
+        
+        <div class="form-group">
+          <label for="fullName">Full Name *</label>
+          <input type="text" id="fullName" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="dob">Date of Birth *</label>
+            <input type="date" id="dob" required>
+          </div>
+          <div class="form-group">
+            <label for="gender">Gender *</label>
+            <select id="gender" required>
+              <option value="">-- Select --</option>
+              <option>Male</option>
+              <option>Female</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nationality">Nationality</label>
+            <input type="text" id="nationality">
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" required>
+          </div>
+        </div>
+
+        <!-- Location Information Section -->
+        <div class="form-section-title">Location Information</div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="province">Province</label>
+            <input type="text" id="province">
+          </div>
+          <div class="form-group">
+            <label for="district">District</label>
+            <input type="text" id="district">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="village">Village/Town</label>
+            <input type="text" id="village">
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number *</label>
+            <input type="tel" id="phone" required>
+          </div>
+        </div>
+
+        <!-- Academic Information Section -->
+        <div class="form-section-title">Academic Information</div>
+
+        <div class="form-group">
+          <label for="program">Program/Course Applying For *</label>
+          <input type="text" id="program" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="school">Previous School/Institution</label>
+            <input type="text" id="school">
+          </div>
+          <div class="form-group">
+            <label for="qualification">Highest Qualification</label>
+            <input type="text" id="qualification">
+          </div>
+        </div>
+
+        <!-- Guardian Information Section -->
+        <div class="form-section-title">Guardian Information</div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="guardianName">Parent/Guardian Name</label>
+            <input type="text" id="guardianName">
+          </div>
+          <div class="form-group">
+            <label for="guardianContact">Parent/Guardian Contact</label>
+            <input type="tel" id="guardianContact">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="emergency">Emergency Contact</label>
+          <input type="tel" id="emergency">
+        </div>
+
+        <!-- Additional Information Section -->
+        <div class="form-section-title">Additional Information</div>
+
+        <div class="form-group">
+          <label for="medical">Medical Conditions (if any)</label>
+          <textarea id="medical" placeholder="Please describe any medical conditions..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="declaration">Declaration *</label>
+          <textarea id="declaration" placeholder="I declare that the information provided is true and correct." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="date">Date</label>
+          <input type="date" id="date">
+        </div>
+
+        <button type="submit" class="submit-btn">Submit Registration</button>
+      </form>
+    </div>
+
+    <!-- ChatGPT Chatbot -->
+    <div class="chatbot-container">
+      <div class="chatbot-header">✨ AI Assistant</div>
+      
+      <div class="api-setup">
+        <strong>Need Help?</strong>
+        Enter your OpenAI API key to get started:
+        <input type="password" id="apiKeyInput" placeholder="sk-...">
+      </div>
+      
+      <div class="chatbot-messages" id="chatMessages"></div>
+      
+      <div class="chatbot-input-area">
+        <input type="text" id="chatInput" placeholder="Ask a question..." />
+        <button id="sendBtn">Send</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  const API_KEY_INPUT = document.getElementById('apiKeyInput');
+  const CHAT_INPUT = document.getElementById('chatInput');
+  const SEND_BTN = document.getElementById('sendBtn');
+  const CHAT_MESSAGES = document.getElementById('chatMessages');
+  const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
+  const BACKEND_API = 'http://localhost:5000';
+
+  // ============ ChatGPT Functions ============
+  function addMessage(text, sender) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${sender}`;
+    const textDiv = document.createElement('div');
+    textDiv.className = 'message-text';
+    textDiv.textContent = text;
+    messageDiv.appendChild(textDiv);
+    CHAT_MESSAGES.appendChild(messageDiv);
+    CHAT_MESSAGES.scrollTop = CHAT_MESSAGES.scrollHeight;
+  }
+
+  async function sendMessage() {
+    const userMessage = CHAT_INPUT.value.trim();
+    const apiKey = API_KEY_INPUT.value.trim();
+
+    if (!userMessage) {
+      alert('Please type a message');
+      return;
+    }
+
+    if (!apiKey) {
+      alert('Please enter your OpenAI API key first');
+      return;
+    }
+
+    addMessage(userMessage, 'user');
+    CHAT_INPUT.value = '';
+    SEND_BTN.disabled = true;
+    SEND_BTN.textContent = '...';
+
+    try {
+      const response = await fetch(OPENAI_API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: 'gpt-3.5-turbo',
+          messages: [
+            {
+              role: 'system',
+              content: 'You are a helpful university registration assistant. Help students fill out their registration forms with practical, concise guidance. Be friendly and professional.'
+            },
+            {
+              role: 'user',
+              content: userMessage
+            }
+          ],
+          max_tokens: 300
+        })
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error?.message || 'API Error');
+      }
+
+      const data = await response.json();
+      const botMessage = data.choices[0].message.content;
+      addMessage(botMessage, 'bot');
+    } catch (error) {
+      addMessage(`Error: ${error.message}. Please check your API key.`, 'bot');
+    } finally {
+      SEND_BTN.disabled = false;
+      SEND_BTN.textContent = 'Send';
+    }
+  }
+
+  CHAT_INPUT.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  });
+
+  SEND_BTN.addEventListener('click', sendMessage);
+
+  window.addEventListener('load', () => {
+    addMessage('Welcome!👋 I\'m here to help you with your registration. What would you like to know?', 'bot');
+  });
+
+  // ============ Form Submission to Database ============
+  document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const submitBtn = e.target.querySelector('.submit-btn');
+    const successMsg = document.getElementById('successMessage');
+    const errorMsg = document.getElementById('errorMessage');
+
+    // Hide messages
+    successMsg.style.display = 'none';
+    errorMsg.style.display = 'none';
+
+    // Collect form data
+    const formData = {
+      full_name: document.getElementById('fullName').value,
+      date_of_birth: document.getElementById('dob').value,
+      gender: document.getElementById('gender').value,
+      nationality: document.getElementById('nationality').value,
+      email: document.getElementById('email').value,
+      phone: document.getElementById('phone').value,
+      province: document.getElementById('province').value,
+      district: document.getElementById('district').value,
+      village: document.getElementById('village').value,
+      program: document.getElementById('program').value,
+      school: document.getElementById('school').value,
+      qualification: document.getElementById('qualification').value,
+      guardian_name: document.getElementById('guardianName').value,
+      guardian_contact: document.getElementById('guardianContact').value,
+      emergency_contact: document.getElementById('emergency').value,
+      medical_conditions: document.getElementById('medical').value,
+      declaration: document.getElementById('declaration').value,
+      application_date: document.getElementById('date').value
+    };
+
+    // Disable submit button
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting...';
+
+    try {
+      const response = await fetch(`${BACKEND_API}/api/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        successMsg.style.display = 'block';
+        successMsg.textContent = `✓ Registration successful! Your Student ID: ${data.student_id}`;
+        e.target.reset();
+        setTimeout(() => {
+          successMsg.style.display = 'none';
+        }, 5000);
+      } else {
+        errorMsg.style.display = 'block';
+        errorMsg.textContent = `✗ Error: ${data.error || 'Failed to submit registration'}`;
+      }
+    } catch (error) {
+      errorMsg.style.display = 'block';
+      errorMsg.textContent = `✗ Error: ${error.message}. Make sure the backend server is running.`;
+      console.error('Submission error:', error);
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit Registration';
+    }
+  });
+</script>
+
+</body>
+</html>
